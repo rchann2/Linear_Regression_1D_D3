@@ -1,0 +1,66 @@
+<html>
+<head>
+  <title></title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+  </head>
+<body>
+  
+</body>
+</html>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+var width = 500,
+    height = 500, 
+    margin = 50;    
+
+    var x=d3.scaleLinear().domain([-10,10]).range([margin,width-margin + 1]);
+    var y=d3.scaleLinear().domain([0,10]).range([height-margin,margin]);
+
+    var xAxis = d3.axisBottom()
+                   .scale(x);
+
+    var yAxis = d3.axisLeft()
+                    .scale(y);
+
+    var svg=d3.select("body").append("svg").attr("width",width).attr("height",height);
+
+    g = svg.append("g")
+        .attr("transform", "translate(50, " + (height - margin) +")")
+        .call(xAxis);
+    
+    g = svg.append("g")
+       .attr("transform", "translate(" + ((width )/2+ margin) + "," + 0 + ")")
+       .call(yAxis);
+    
+    var data = [];
+    
+    svg.on('click', function(){
+        x = d3.mouse(this)[0]
+        data.push(x)
+        svg.selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr('cx', function(d){ return d })
+          .attr('cy', function(d) {return (height - margin)})
+          .attr("r",function(d) {return 5;})
+          .style("fill",function(d) {return "green";})
+          .style("opacity",function(d) {return 100;});
+
+        if(data.length >= 2){
+             svg.append("line")          // attach a line
+                .style("stroke", "green")  // colour the line
+                .style('stroke-width', 3)
+                .attr("x1", Math.min(...data))     // x position of the first end of the line
+                .attr("y1", height - margin)      // y position of the first end of the line
+                .attr("x2", Math.max(...data))     // x position of the second end of the line
+                .attr("y2", height - margin);        
+        }
+    }); 
+    
+</script>
